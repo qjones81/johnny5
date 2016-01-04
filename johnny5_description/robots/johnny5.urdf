@@ -1,0 +1,308 @@
+<robot
+  name="johnny5">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0129466921025274 1.46986945614991E-07 0.0430096437927198"
+        rpy="0 0 0" />
+      <mass
+        value="0.309217597051306" />
+      <inertia
+        ixx="0.00516250892922132"
+        ixy="-1.10618839551138E-06"
+        ixz="-0.000132244590333623"
+        iyy="0.00452034216373148"
+        iyz="1.1588407691732E-06"
+        izz="0.00408494642964707" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="base_kinect">
+    <inertial>
+      <origin
+        xyz="-0.0144388322715321 9.94166362184856E-05 0.0450718586997779"
+        rpy="0 0 0" />
+      <mass
+        value="0.658662598935644" />
+      <inertia
+        ixx="0.00313393147092216"
+        ixy="9.16473098477376E-07"
+        ixz="-3.61409355768333E-06"
+        iyy="0.000417773284985501"
+        iyz="3.46681584580767E-07"
+        izz="0.00311195503072936" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/base_kinect.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.494117647058824 0.494117647058824 0.494117647058824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/base_kinect.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_kinect"
+    type="fixed">
+    <origin
+      xyz="0 0 0.2794"
+      rpy="-6.6305E-32 6.983E-15 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="base_kinect" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="left_wheel_link">
+    <inertial>
+      <origin
+        xyz="-3.15771336107523E-06 -0.00514907589975609 -6.10634417752554E-07"
+        rpy="0 0 0" />
+      <mass
+        value="0.185470907594953" />
+      <inertia
+        ixx="0.000343488408327717"
+        ixy="6.6249708796195E-09"
+        ixz="-7.83273969562423E-10"
+        iyy="0.000675685632439309"
+        iyz="1.3152736589645E-09"
+        izz="0.000343484509398272" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/left_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/left_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.036266 0.17909 -0.032293"
+      rpy="-4.7995E-30 6.983E-15 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="right_wheel_link">
+    <inertial>
+      <origin
+        xyz="1.89298974090368E-06 0.00514907589975605 -2.60011881816902E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.18547090759495" />
+      <inertia
+        ixx="0.000343485813540276"
+        ixy="3.94825849640994E-09"
+        ixz="1.99937225415519E-09"
+        iyy="0.000675685632439299"
+        iyz="-5.48009478014485E-09"
+        izz="0.000343487104185704" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/right_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/right_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0.042643 -0.17909 -0.039052"
+      rpy="-4.7995E-30 6.983E-15 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_wheel_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="rear_caster_link">
+    <inertial>
+      <origin
+        xyz="-0.0269129567673109 6.31139243040812E-05 -0.0485106938792523"
+        rpy="0 0 0" />
+      <mass
+        value="0.0177867839089274" />
+      <inertia
+        ixx="1.55753406989563E-05"
+        ixy="-2.24523759266378E-08"
+        ixz="7.92774909345852E-06"
+        iyy="1.97520175379044E-05"
+        iyz="-2.29158619121046E-08"
+        izz="1.53958205796652E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/rear_caster_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/rear_caster_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rear_caster_joint"
+    type="continuous">
+    <origin
+      xyz="-0.2667 0 0.0149859999999995"
+      rpy="-4.79947081528445E-30 6.98296267768626E-15 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rear_caster_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="rear_wheel_link">
+    <inertial>
+      <origin
+        xyz="-2.77555756156289E-16 0.00317500000000004 1.66533453693773E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.0761486138405399" />
+      <inertia
+        ixx="7.00186808106294E-05"
+        ixy="7.04759108753428E-12"
+        ixz="-2.96109858367634E-20"
+        iyy="0.000134726177971152"
+        iyz="-6.61112545777978E-12"
+        izz="7.00186808106294E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/rear_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://johnny5_description/meshes/rear_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rear_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.046973 -0.003556 -0.069063"
+      rpy="0 0 0" />
+    <parent
+      link="rear_caster_link" />
+    <child
+      link="rear_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+</robot>
