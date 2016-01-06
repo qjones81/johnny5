@@ -35,6 +35,7 @@ private:
 
   // Platform Options
   float _wheel_diameter;
+  float _wheel_radius;
   float _wheel_track;
   float _encoder_resolution;
   float _gear_reduction;
@@ -50,6 +51,7 @@ private:
   // Encoder Data
   int _encoder_left;
   int _encoder_right;
+  int _bad_encoder_count;
   
   // Speed Data (PPS aka ints)
   int _v_left;

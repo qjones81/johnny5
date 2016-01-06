@@ -31,9 +31,10 @@ BaseController::BaseController() :
   _v_right(0),
   _v_target_left(0),
   _v_target_right(0),
-  _last_cmd_vel(0)
+  _last_cmd_vel(0),
+  _bad_encoder_count(0)
   {
-
+    //_wheel_radius = _wheel_diameter * 0.5;
   }
 
 BaseController::~BaseController()
@@ -55,6 +56,9 @@ void BaseController::spin()
 }
 bool BaseController::init()
 {
+  // Update Radius
+  _wheel_radius = _wheel_diameter * 0.5;
+  //ROS_INFO("RADIUS: %f, %f", _wheel_radius, _wheel_diameter);
   // Encoder Ticks per Meter of Travel
   _ticks_per_meter = _encoder_resolution * _gear_reduction / (_wheel_diameter * M_PI);
 
@@ -71,6 +75,7 @@ bool BaseController::init()
   
   // Reset Encoders back to zero
   _microcontroller.reset_encoders();
+  _encoder_right = _encoder_left = 0;
   
   // Update Publishers and Subscribers
   _odom_pub = _nh.advertise<nav_msgs::Odometry>(_odom_frame, 50);
@@ -92,11 +97,13 @@ void BaseController::update()
   int left_enc;
   int right_enc;
   bool bSuccess = _microcontroller.get_encoder_ticks(left_enc, right_enc);
-  //ROS_INFO("Left: %d, Right: %d", left_enc, right_enc);
-  //try
-  //catch
-  // blah
-  
+  if(!bSuccess)
+  {
+    ++_bad_encoder_count;
+    ROS_ERROR("Bad Encoder Read Count: %d",  _bad_encoder_count);
+    return;
+  }
+
   
   // Update Time Values
   _dt = _current_time - _last_time;
@@ -117,6 +124,7 @@ void BaseController::update()
   v_xy = dxy_ave / dt;
   v_th = d_th / dt;
   
+  float _x_prev = _x;
   if(dxy_ave != 0)
   {
     float d_x = cos(d_th) * dxy_ave;
@@ -125,11 +133,55 @@ void BaseController::update()
     _y += (sin(_th) * d_x + cos(_th) * d_y);
   }
   
+  float vel = (_x - _x_prev) / dt;
   if(d_th != 0)
   {
     _th += d_th;
   }
   
+  //since all odometry is 6DOF we'll need a quaternion created from yaw
+    geometry_msgs::Quaternion odom_quat;// = tf::createQuaternionMsgFromYaw(_th);
+  odom_quat.x = 0.0;
+  odom_quat.y = 0.0;
+  odom_quat.z = sin(_th / 2.0);
+  odom_quat.w = cos(_th / 2.0);
+  
+  
+    //first, we'll publish the transform over tf
+    geometry_msgs::TransformStamped odom_trans;
+    odom_trans.header.stamp = _current_time;
+    odom_trans.header.frame_id = _odom_frame;
+    odom_trans.child_frame_id = _base_frame;
+
+    odom_trans.transform.translation.x = _x;
+    odom_trans.transform.translation.y = _y;
+    odom_trans.transform.translation.z = 0.0;
+    odom_trans.transform.rotation = odom_quat;
+
+    //send the transform
+    odom_broadcaster.sendTransform(odom_trans);
+
+    //next, we'll publish the odometry message over ROS
+    nav_msgs::Odometry odom;
+    odom.header.stamp = _current_time;
+    odom.header.frame_id = _odom_frame;
+
+    //set the position
+    odom.pose.pose.position.x = _x;
+    odom.pose.pose.position.y = _y;
+    odom.pose.pose.position.z = 0.0;
+    odom.pose.pose.orientation = odom_quat;
+
+    //set the velocity
+    odom.child_frame_id = _base_frame;
+    odom.twist.twist.linear.x = v_xy;
+    odom.twist.twist.linear.y = 0;
+    odom.twist.twist.angular.z = v_th;
+
+    //publish the message
+    _odom_pub.publish(odom);
+    
+    
   if(_current_time > _last_cmd_vel + ros::Duration(_base_controller_timeout))
   {
     _v_target_left = 0;
@@ -194,24 +246,31 @@ void BaseController::cmd_vel_callback(const geometry_msgs::Twist& vel_cmd)
   _last_cmd_vel = ros::Time::now();
   float x = vel_cmd.linear.x;
   float th = vel_cmd.angular.z;
-  float right = 00;
+  float right = 0;
   float left = 0;
-  if(x == 0) // Turning in place (This is wrong)
-  {
-    right = th * _wheel_track * _gear_reduction * 0.5;
-    left = -right;
-  }
-  else if(th == 0) // Pure Forward/Backwards Motion
-  {
-    left = right = x;
-  }
-  else// Turn Rotate. Reevaluate this
-  {
-    left = x - th * _wheel_track * _gear_reduction * 0.5;
-    right = x + th * _wheel_track * _gear_reduction * 0.5;
-  }
+//   if(x == 0) // Turning in place (This is wrong)
+//   {
+//     right = th * _wheel_track * _gear_reduction * 0.5;
+//     left = -right;
+//   }
+//   else if(th == 0) // Pure Forward/Backwards Motion
+//   {
+//     left = right = x;
+//   }
+//   else// Turn Rotate. Reevaluate this
+//   {
+//     left = x - th * _wheel_track * _gear_reduction * 0.5;
+//     right = x + th * _wheel_track * _gear_reduction * 0.5;
+//   }
+//   
+  //left = (x - th * _wheel_track / 2.0) / _wheel_radius / (M_PI * 2); 
+  //right = (x + th * _wheel_track / 2.0) / _wheel_radius / (M_PI * 2);
+  left = (x - th * _wheel_track / 2.0); 
+  right = (x + th * _wheel_track / 2.0);
+  
   _v_target_left = (int)(left * _ticks_per_meter);
   _v_target_right = (int)(right * _ticks_per_meter);
+  
 }
  
  // Main Startup Function

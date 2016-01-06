@@ -39,7 +39,7 @@ private:
   std::vector<int>  execute_array(const std::string &szCommand);
   
   void split(const std::string& s, char c, std::vector<string>& v);
-  void convertToInt(std::vector<int>& values, const std::vector<std::string>& array);
+  bool convertToInt(std::vector<int>& values, const std::vector<std::string>& array);
   unsigned long _baud;
   int _timeout;
   std::string _port;
