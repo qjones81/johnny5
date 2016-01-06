@@ -24,16 +24,20 @@ MicroControllerBridge::~MicroControllerBridge()
   }
 }
 
-bool MicroControllerBridge::init()
+bool MicroControllerBridge::init(const std::string &port, unsigned long baud, int timeout)
 {
+  _port = port;
+  _baud = baud;
+  _timeout = timeout;
+  
   // Don't open yet.  But set it up.
   _serial = new serial::Serial();
   _serial->setPort(_port);
   _serial->setBaudrate(_baud);
   
   // Set Timeout
-  serial::Timeout timeout = serial::Timeout::simpleTimeout(_timeout);
-  _serial->setTimeout(timeout);
+  serial::Timeout timeout_ = serial::Timeout::simpleTimeout(_timeout);
+  _serial->setTimeout(timeout_);
 }
 void MicroControllerBridge::connect()
 {

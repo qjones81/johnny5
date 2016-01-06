@@ -17,8 +17,8 @@ BaseController::BaseController() :
   _stopped(false),
   _wheel_diameter(0.1524), // 6 in
   _wheel_track(0.381),	  // 15 in
-  _encoder_resolution(64), 
-  _gear_reduction(29),
+  _encoder_resolution(1856), 
+  _gear_reduction(1),
   _accel_limit(0.1),
   _ticks_per_meter(3876.53),
   _max_accel(1.0),
@@ -56,6 +56,15 @@ void BaseController::spin()
 }
 bool BaseController::init()
 {
+  // Get Parameters from server
+  std::string port;
+  int baud;
+  int timeout;
+  
+   _nh.param<std::string>("base_controller/port", port, "/dev/ttyS0");
+   _nh.param("base_controller/baud", baud, 38400);
+   _nh.param("base_controller/timeout", timeout, 500);
+  
   // Update Radius
   _wheel_radius = _wheel_diameter * 0.5;
   //ROS_INFO("RADIUS: %f, %f", _wheel_radius, _wheel_diameter);
@@ -70,7 +79,7 @@ bool BaseController::init()
   _last_time = ros::Time::now();
   
   // Microcontroller Initializations/Connect
-  _microcontroller.init();
+  _microcontroller.init(port, (unsigned long)baud, timeout);
   _microcontroller.connect();
   
   // Reset Encoders back to zero

@@ -18,7 +18,7 @@ public:
   //! Destructor.
   ~MicroControllerBridge();
 
-  bool init();
+  bool init(const std::string &szPort, unsigned long baud, int timeout);
   void update();
   void connect();
   void close();
