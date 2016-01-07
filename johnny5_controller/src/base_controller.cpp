@@ -147,7 +147,7 @@ void BaseController::update()
   {
     _th += d_th;
   }
-  
+  ROS_INFO("Publish: %f\n", _th * 180.0 / M_PI);
   //since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odom_quat;// = tf::createQuaternionMsgFromYaw(_th);
   odom_quat.x = 0.0;

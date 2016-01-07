@@ -1,5 +1,6 @@
 // ROS Includes
 #include <tf/transform_listener.h>
+
 #include <tf/tf.h>
 
 // C++ Includes
@@ -87,15 +88,17 @@ bool DeadReckoning::drive(float distance, float speed)
 bool DeadReckoning::turn(float angle, float angularSpeed)
 {
   bool ccw = (angle >= 0); // counter clockwise rotation
-		
+	tfScalar roll, pitch, yaw;	
   // Record Start
    tf::StampedTransform transform;
    _transform_listener.lookupTransform("/odom", "/base_link", ros::Time(0), transform);
    
    tf::Quaternion startRotation = transform.getRotation();
    
-   float startAngle = 2 * atan2(startRotation[2], startRotation[3]);
-
+   tf::Matrix3x3(startRotation).getRPY(roll, pitch, yaw);
+   
+   //float startAngle = 2 * atan2(startRotation[2], startRotation[3]);
+float startAngle = yaw;
    ROS_INFO( "Start Angle: %f", startAngle);
    float previousAngle = startAngle;
    float angleOffset = 0.0;
@@ -119,24 +122,43 @@ bool DeadReckoning::turn(float angle, float angularSpeed)
       _transform_listener.lookupTransform("/odom", "/base_link", ros::Time(0), transform);
       tf::Quaternion currentRotation = transform.getRotation();
       
-      float currentAngle = 2 * atan2(currentRotation[2], currentRotation[3]);
-      //ROS_INFO("Current Angle: %f", currentAngle * 180 / M_PI);
+      tf::Matrix3x3(currentRotation).getRPY(roll, pitch, yaw);
+      float currentAngle = yaw;
+      //float currentAngle = 2 * atan2(currentRotation[2], currentRotation[3]);
+     // ROS_INFO("Current Angle: %f", currentAngle * 180 / M_PI);
 //ROS_INFO("Current Angle Quat: %f", currentRotation.z());
 
       //# we need to handle roll over of the angle
-      if (currentAngle * previousAngle < 0 && fabs(currentAngle - previousAngle) > M_PI / 2.0){
-	if (currentAngle > previousAngle){
-	//  ROS_INFO("subtracting");
-          angleOffset = angleOffset - 2 * M_PI;
-	}
-        else{
-	  //ROS_INFO("adding");
-          angleOffset = angleOffset + 2 * M_PI;
-	  }
+//       if (currentAngle * previousAngle < 0 && fabs(currentAngle - previousAngle) > M_PI / 2.0){
+// 	if (currentAngle > previousAngle){
+// 	//  ROS_INFO("subtracting");
+//           angleOffset = angleOffset - 2 * M_PI;
+// 	}
+//         else{
+// 	  //ROS_INFO("adding");
+//           angleOffset = angleOffset + 2 * M_PI;
+// 	  }
+//       }
+      
+      if(currentAngle * previousAngle < 0 && currentAngle < 0.0)
+      {
+	
+	//ROS_INFO("Offset 1: ");
+	//currentAngle = (2 * M_PI) + currentAngle;
+	angleOffset = angleOffset + (2 * M_PI);
       }
+      else if(currentAngle * previousAngle < 0 &&  currentAngle > 0.0)
+      {
+	//ROS_INFO("Offset 2: ");
+	//currentAngle = currentAngle - (2 * M_PI);
+	angleOffset = angleOffset + (2 * M_PI);
+      }
+      previousAngle = currentAngle;
+      
       float angleTurned = currentAngle + angleOffset - startAngle;
-      float previousAngle = currentAngle;
+      
                                 
+      ROS_INFO("Current Angle New: %f", currentAngle * 180 / M_PI);
       ROS_INFO("Angle Turned: %f", angleTurned);
 
       if (ccw)
@@ -178,13 +200,13 @@ int main(int argc, char** argv)
  {
   
   ros::init(argc, argv, "dead_reckoning");
-  
+  //ros::Rate rate(50.0);
     // Create Base Controller;
   DeadReckoning dead_reckoning;
   dead_reckoning.init();
   dead_reckoning.drive(5.0, 0.5);
- // dead_reckoning.turn(-2 * M_PI, 1.0);
-  //dead_reckoning.drive(5.0, 0.5);
+  dead_reckoning.turn(M_PI, 0.5);
+  dead_reckoning.drive(5.0, 0.5);
   
   
   

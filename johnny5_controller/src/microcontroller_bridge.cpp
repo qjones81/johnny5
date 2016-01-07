@@ -10,7 +10,7 @@
 
 MicroControllerBridge::MicroControllerBridge() : 
   _port("/dev/ttyS0"), 
-  _baud(38400),
+  _baud(57600),
   _timeout(500) // 0.5 seconds or 500 milliseconds
   {
 
@@ -62,6 +62,7 @@ void MicroControllerBridge::connect()
 ros::Duration(1.0).sleep();
      unsigned long testBaud = get_baud();
 
+    // ROS_INFO("LOOKING FOR: %d/%d", _baud, testBaud);
      if(testBaud != _baud)
      {
        // Sleep And Try Again
