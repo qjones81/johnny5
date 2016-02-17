@@ -105,7 +105,7 @@ void BaseController::update()
   // Get Encoder Values
   int left_enc;
   int right_enc;
-  bool bSuccess = _microcontroller.get_encoder_ticks(left_enc, right_enc);
+  bool bSuccess = _microcontroller.get_encoder_ticks(right_enc, left_enc);
   if(!bSuccess)
   {
     ++_bad_encoder_count;
@@ -123,7 +123,6 @@ void BaseController::update()
   // TODO: Need Error Checking here if we didn't get encoder values
   d_right = (right_enc - _encoder_right) / _ticks_per_meter;
   d_left = (left_enc - _encoder_left) / _ticks_per_meter;
-  
   // Cache the Value
   _encoder_left = left_enc;
   _encoder_right = right_enc;

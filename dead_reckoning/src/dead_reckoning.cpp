@@ -63,7 +63,7 @@ bool DeadReckoning::drive(float distance, float speed)
       }
       else
       {
-	//ROS_INFO("Sending Vel Command: %f", vel_msg.linear.x);
+	ROS_INFO("Sending Vel Command: %f", vel_msg.linear.x);
 	_vel_pub.publish(vel_msg); // Publish Velocity
       }
       
@@ -205,8 +205,8 @@ int main(int argc, char** argv)
   DeadReckoning dead_reckoning;
   dead_reckoning.init();
   dead_reckoning.drive(5.0, 0.5);
-  dead_reckoning.turn(M_PI, 0.5);
-  dead_reckoning.drive(5.0, 0.5);
+  //dead_reckoning.turn(180, 0.5);
+  //dead_reckoning.drive(5.0, 0.5);
   
   
   
