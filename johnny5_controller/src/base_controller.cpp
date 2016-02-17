@@ -15,12 +15,12 @@ BaseController::BaseController() :
   _base_controller_rate(10.0), // 10 hz
   _base_controller_timeout(1.0), // 1 Second
   _stopped(false),
-  _wheel_diameter(0.1524), // 6 in
-  _wheel_track(0.381),	  // 15 in
-  _encoder_resolution(1856), 
+  _wheel_diameter(0.2032), // 8 in
+  _wheel_track(0.5),	  // ~19 in
+  _encoder_resolution(72000), 
   _gear_reduction(1),
   _accel_limit(0.1),
-  _ticks_per_meter(3876.53),
+  _ticks_per_meter(1),
   _max_accel(1.0),
   _x(0),
   _y(0),
@@ -147,7 +147,7 @@ void BaseController::update()
   {
     _th += d_th;
   }
-  ROS_INFO("Publish: %f\n", _th * 180.0 / M_PI);
+//  ROS_INFO("Publish: %d\n", _encoder_left);
   //since all odometry is 6DOF we'll need a quaternion created from yaw
     geometry_msgs::Quaternion odom_quat;// = tf::createQuaternionMsgFromYaw(_th);
   odom_quat.x = 0.0;
@@ -237,7 +237,7 @@ void BaseController::update()
   
   if(!_stopped)
   {
-    _microcontroller.drive(_v_target_left,_v_target_right);
+    _microcontroller.drive(_v_left,_v_right);
   }
 
 }
@@ -279,7 +279,7 @@ void BaseController::cmd_vel_callback(const geometry_msgs::Twist& vel_cmd)
   
   _v_target_left = (int)(left * _ticks_per_meter);
   _v_target_right = (int)(right * _ticks_per_meter);
-  
+
 }
  
  // Main Startup Function
