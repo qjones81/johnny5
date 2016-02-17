@@ -1,0 +1,255 @@
+<robot
+  name="final">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.105602743604688 -1.02296779703163E-07 0.0858110294656201"
+        rpy="0 0 0" />
+      <mass
+        value="4.14818186398938" />
+      <inertia
+        ixx="0.103863224222374"
+        ixy="-7.29907783167067E-08"
+        ixz="-0.00100162391303777"
+        iyy="0.106487087467334"
+        iyz="2.27140546178397E-08"
+        izz="0.141688975304366" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.870588235294118 0.76078431372549 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="base_laser">
+    <inertial>
+      <origin
+        xyz="0.0127 1.27087771103731E-19 -0.0254"
+        rpy="0 0 0" />
+      <mass
+        value="0.7521662376" />
+      <inertia
+        ixx="0.000980644880738574"
+        ixy="-2.68989534912001E-19"
+        ixz="-1.37318069412529E-21"
+        iyy="0.00117272996047087"
+        iyz="-7.16140114664618E-36"
+        izz="0.0018298631279761" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/base_laser.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/base_laser.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="laser_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0109499999999999 0 0.25575"
+      rpy="1.45390373192998E-33 -3.44227613947609E-17 -4.22366966803326E-17" />
+    <parent
+      link="base_link" />
+    <child
+      link="base_laser" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="left_wheel_link">
+    <inertial>
+      <origin
+        xyz="-1.02697830889065E-05 0.0207696125417688 -1.29881572009244E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.360809172043754" />
+      <inertia
+        ixx="0.00106675827256857"
+        ixy="1.00199366250099E-07"
+        ixz="-5.46170508884832E-09"
+        iyy="0.00202538580830831"
+        iyz="7.42904254208583E-09"
+        izz="0.00106727492610413" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/left_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.15 0.15 0.15 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/left_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.1997875 0"
+      rpy="0 -3.44227613947609E-17 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_wheel_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="right_wheel_link">
+    <inertial>
+      <origin
+        xyz="-7.84481351270849E-06 -0.0207696125417685 -2.84905793875717E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.360809172043695" />
+      <inertia
+        ixx="0.00106697353985248"
+        ixy="-9.44069048271713E-08"
+        ixz="-2.70312200163103E-07"
+        iyy="0.00202538582183835"
+        iyz="-1.71229823500517E-08"
+        izz="0.00106705967235024" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/right_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.15 0.15 0.15 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/right_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.202910199564064 0"
+      rpy="0 -3.44227613947609E-17 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="rear_caster_link">
+    <inertial>
+      <origin
+        xyz="-0.0368798722263375 -0.000283567685018335 -0.055448419537839"
+        rpy="0 0 0" />
+      <mass
+        value="0.176949617511378" />
+      <inertia
+        ixx="0.000127393495355047"
+        ixy="6.33658096704423E-08"
+        ixz="1.19906046209144E-05"
+        iyy="0.000135634398834192"
+        iyz="9.21858894693954E-08"
+        izz="0.000122569009242498" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/rear_caster_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.796078431372549 0.823529411764706 0.937254901960784 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://final_description/meshes/rear_caster_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rear_caster_joint"
+    type="continuous">
+    <origin
+      xyz="-0.311952216057906 0 -0.00604000000000001"
+      rpy="-3.04704848392389E-33 -1.0830817995158E-17 8.85184209651363E-17" />
+    <parent
+      link="base_link" />
+    <child
+      link="rear_caster_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+</robot>
