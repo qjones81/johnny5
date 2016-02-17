@@ -4,7 +4,7 @@
 # /dev/ttyUSB# where # is a number such as 0, 1, 2, etc.
 
 port: /dev/ttyACM0
-baud: 38400
+baud: 57600
 timeout: 500 # in milliseconds.
 
 rate: 50
@@ -19,10 +19,10 @@ base_frame: base_link
 odom_frame: odom
 
 # === Robot drivetrain parameters
-wheel_diameter: 0.1524
-wheel_track: 0.381
-encoder_resolution: 1856 # from SainSmart for 29:1 motors (64 * 21)
-gear_reduction: 1.0
+wheel_diameter: 0.2032
+wheel_track: 0.5
+encoder_resolution: 72000 # from RobotKitWorld for 36:1 motors (2000 * 36)
+gear_reduction: 1
 #motors_reversed: True
 
 # === PID parameters
@@ -30,7 +30,7 @@ gear_reduction: 1.0
 #Kd: 12
 #Ki: 0
 #Ko: 50
-accel_limit: 0.05
+accel_limit: 0.9
 
 # === Sensor definitions.  Examples only - edit for your robot.
 #     Sensor type can be one of the follow (case sensitive!):
