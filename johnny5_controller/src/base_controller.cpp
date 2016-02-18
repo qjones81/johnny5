@@ -72,7 +72,7 @@ bool BaseController::init()
   _ticks_per_meter = _encoder_resolution * _gear_reduction / (_wheel_diameter * M_PI);
 
   // Max Acceleration
-  _max_accel = _accel_limit * _ticks_per_meter / _base_controller_rate;
+  _max_accel = 15000;//_accel_limit * _ticks_per_meter / _base_controller_rate;
   
   // Time Variables
   _current_time = ros::Time::now();
@@ -189,7 +189,7 @@ void BaseController::update()
     //publish the message
     _odom_pub.publish(odom);
     
-    
+//   ROS_INFO("V TARGET: %d", _v_target_left); 
   if(_current_time > _last_cmd_vel + ros::Duration(_base_controller_timeout))
   {
     _v_target_left = 0;
@@ -223,6 +223,7 @@ void BaseController::update()
     {
       _v_right = _v_target_right;
     }
+
   }
   else
   {
@@ -238,6 +239,8 @@ void BaseController::update()
   {
     _microcontroller.drive(_v_left,_v_right);
   }
+//ROS_INFO("Actual: %d, %d", _v_left, _v_right);
+//ROS_INFO("Target: %d, %d", _v_target_left, _v_target_right);
 
 }
 void BaseController::stop()
