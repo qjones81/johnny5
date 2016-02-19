@@ -1,4 +1,4 @@
-image: map.pgm
+image: full_office.pgm
 resolution: 0.050000
 origin: [-10.000000, -16.200000, 0.000000]
 negate: 0
