@@ -15,11 +15,13 @@ BaseController::BaseController() :
   _base_controller_rate(10.0), // 10 hz
   _base_controller_timeout(1.0), // 1 Second
   _stopped(false),
-  _wheel_diameter(0.2032), // 8 in
-  _wheel_track(0.5),	  // ~19 in
+  _wheel_diameter(0.2), // 8 in
+  _wheel_track(0.48),	  // ~19 in
   _encoder_resolution(72000), 
   _gear_reduction(1),
   _accel_limit(0.1),
+_accel_rate(15000.0),
+_decel_rate(15000.0),
   _ticks_per_meter(1),
   _max_accel(1.0),
   _x(0),
@@ -62,9 +64,19 @@ bool BaseController::init()
   int timeout;
   
    _nh.param<std::string>("base_controller/port", port, "/dev/ttyS0");
+   _nh.param<std::string>("base_controller/base_frame", _base_frame, "base_link");
+   _nh.param<std::string>("base_controller/odom_frame", _odom_frame, "odom");
    _nh.param("base_controller/baud", baud, 38400);
    _nh.param("base_controller/timeout", timeout, 500);
-  
+   _nh.param("base_controller/wheel_track", _wheel_track, 0.48);
+   _nh.param("base_controller/wheel_diameter", _wheel_diameter, 0.2);
+   _nh.param("base_controller/encoder_resolution", _encoder_resolution, 72000.0);
+   _nh.param("base_controller/gear_reduction", _gear_reduction, 1.0);
+   _nh.param("base_controller/decel_rate", _decel_rate, 10000.0);
+   _nh.param("base_controller/accel_rate", _accel_rate, 10000.0);
+   _nh.param("base_controller/base_controller_rate", _base_controller_rate, 10.0);
+   _nh.param("base_controller/base_controller_timeout", _base_controller_timeout, 1.0);
+
   // Update Radius
   _wheel_radius = _wheel_diameter * 0.5;
   //ROS_INFO("RADIUS: %f, %f", _wheel_radius, _wheel_diameter);
@@ -72,8 +84,7 @@ bool BaseController::init()
   _ticks_per_meter = _encoder_resolution * _gear_reduction / (_wheel_diameter * M_PI);
 
   // Max Acceleration
-  _max_accel = 15000;//_accel_limit * _ticks_per_meter / _base_controller_rate;
-  
+  _max_accel = _accel_limit * _ticks_per_meter / _base_controller_rate;
   // Time Variables
   _current_time = ros::Time::now();
   _last_time = ros::Time::now();
@@ -199,7 +210,7 @@ void BaseController::update()
   // Left
   if(_v_left < _v_target_left)
   {
-    _v_left += _max_accel;
+    _v_left += _accel_rate;
     if(_v_left > _v_target_left)
     {
       _v_left = _v_target_left;
@@ -208,7 +219,7 @@ void BaseController::update()
   else
   {
     // v_left = min(_v_left + _max_accel, _v_target_left);
-    _v_left -= _max_accel;
+    _v_left -= _decel_rate;
     if(_v_left < _v_target_left)
     {
       _v_left = _v_target_left;
@@ -218,7 +229,7 @@ void BaseController::update()
   // Right
     if(_v_right < _v_target_right)
   {
-    _v_right += _max_accel;
+    _v_right += _accel_rate;
     if(_v_right > _v_target_right)
     {
       _v_right = _v_target_right;
@@ -228,7 +239,7 @@ void BaseController::update()
   else
   {
     // _v_right = min(_v_right + _max_accel, _v_target_left);
-    _v_right -= _max_accel;
+    _v_right -= _decel_rate;
     if(_v_right < _v_target_right)
     {
       _v_right = _v_target_right;

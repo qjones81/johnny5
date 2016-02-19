@@ -3,7 +3,7 @@ scale_linear: 0.5
 scale_linear_turbo: 1.0
 
 axis_angular: 0
-scale_angular: 0.5
+scale_angular: 1.0
 
-enable_button: 0  # L2 shoulder button
-enable_turbo_button: 5  # L1 shoulder button
+enable_button: 0  # A button
+enable_turbo_button: 5  # RB shoulder button

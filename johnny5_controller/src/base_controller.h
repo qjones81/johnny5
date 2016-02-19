@@ -28,21 +28,22 @@ private:
   std::string _base_frame;
   std::string _odom_frame;
 
-  float _base_controller_rate;
-  float _base_controller_timeout;
+  double _base_controller_rate;
+  double _base_controller_timeout;
 
   bool _stopped;
 
   // Platform Options
-  float _wheel_diameter;
-  float _wheel_radius;
-  float _wheel_track;
-  float _encoder_resolution;
-  float _gear_reduction;
-  float _accel_limit;
-  float _ticks_per_meter;
-  float _max_accel;
-
+  double _wheel_diameter;
+  double _wheel_radius;
+  double _wheel_track;
+  double _encoder_resolution;
+  double _gear_reduction;
+  double _accel_limit;
+  double _ticks_per_meter;
+  double _max_accel;
+  double _accel_rate;
+  double _decel_rate;
   // Position Data -> To Odometry Class
   float _x;
   float _y;
