@@ -1,5 +1,5 @@
 <package>
-  <description brief="Final Platform.SLDASM">Final Platform.SLDASM</description>
+  <description brief="final_description">final_description</description>
   <depend package="gazebo" />
   <author>me</author>
   <license>BSD</license>

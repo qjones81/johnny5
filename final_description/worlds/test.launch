@@ -1,0 +1,12 @@
+<launch>
+  <include
+    file="$(find gazebo_ros)/launch/empty_world.launch">
+	<arg name="world_name" value="$(find final_description)/worlds/office_new.world"/>
+</include>
+  <node
+    name="spawn_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find final_description)/robots/final_gazebo.URDF -urdf -model final_description -z .5"
+    output="screen" />
+</launch>
